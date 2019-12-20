@@ -76,7 +76,7 @@ router.get('/shopify/callback', (req, res) => {
                 const accessToken = accessTokenResponse.access_token;
 
                 const shopify = new Shopify({
-                    shopName: 'tool-x1.myshopify.com',
+                    shopName: shop,
                     accessToken: accessToken
                 });
 
