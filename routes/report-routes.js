@@ -75,12 +75,18 @@ router.get('/shopify/callback', (req, res) => {
             .then((accessTokenResponse) => {
                 const accessToken = accessTokenResponse.access_token;
 
-                const shopify = new Shopify({
-                    shopName: shop,
-                    accessToken: accessToken
-                });
+                process.env.ACCESS_TOKEN = accessToken;
 
-                console.log(shopify);
+                // const shopify = new Shopify({
+                //     shopName: shop,
+                //     accessToken: accessToken
+                // });
+
+                // shopify.order
+                //     .list({ limit: 5 })
+                //     .then((orders) => console.log(orders))
+                //     .catch((err) => console.error(err));
+
 
                 res.status(200).send("Got an access token, let's do something with it");
             })
@@ -92,6 +98,36 @@ router.get('/shopify/callback', (req, res) => {
         res.status(400).send('Required parameters missing');
     }
 });
+
+router.get('/get-products', (req, res) => {
+    const { shop } = req.query;
+    try {
+        let url = `https://${shop}/admin/products.json`;
+
+        let options = {
+            method: 'GET',
+            url: url,
+            json: true,
+            headers: {
+                'X-Shopify-Access-Token': process.env.ACCESS_TOKEN,
+                'content-type': 'application/json'
+            }
+        };
+
+        request(options)
+            .then((parsedBody) => {
+                console.log(parsedBody);
+                res.status(200).send("Products listed");
+            })
+            .catch((error) => {
+                console.log(error);
+                res.status(500).send("Something went wrong");
+            })
+
+    } catch (error) {
+        res.send("No access token available");
+    }
+})
 
 
 module.exports = router;
