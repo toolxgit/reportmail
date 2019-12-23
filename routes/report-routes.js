@@ -9,8 +9,8 @@ const Shopify = require('shopify-api-node');
 
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
-const scopes = 'read_products';
-const forwardingAddress = "https://4dabfc09.ngrok.io";
+const scopes = 'read_products,read_orders';
+const forwardingAddress = "https://d2a5ecd2.ngrok.io";
 
 
 router.get('/shopify', (req, res) => {
@@ -102,7 +102,8 @@ router.get('/shopify/callback', (req, res) => {
 router.get('/get-products', (req, res) => {
     const { shop } = req.query;
     try {
-        let url = `https://${shop}/admin/products.json`;
+        //let url = `https://${shop}/admin/products.json`;
+        let url = `https://${shop}/admin/api/2019-10/orders.json?status=closed&financial_status=paid`;
 
         let options = {
             method: 'GET',
@@ -115,8 +116,8 @@ router.get('/get-products', (req, res) => {
         };
 
         request(options)
-            .then((parsedBody) => {
-                console.log(parsedBody);
+            .then((orders) => {
+                console.log(orders.orders);
                 res.status(200).send("Products listed");
             })
             .catch((error) => {
