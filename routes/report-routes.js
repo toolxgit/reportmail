@@ -10,7 +10,7 @@ const Shopify = require('shopify-api-node');
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products,read_orders';
-const forwardingAddress = "https://d2a5ecd2.ngrok.io";
+const forwardingAddress = "https://ebe3f0a7.ngrok.io";
 
 
 router.get('/shopify', (req, res) => {
@@ -99,11 +99,12 @@ router.get('/shopify/callback', (req, res) => {
     }
 });
 
-router.get('/get-products', (req, res) => {
-    const { shop } = req.query;
+
+//Get revenue based on all paid orders
+router.get('/get-revenue-all', (req, res) => {
+    const { shop, month, year } = req.query;
     try {
-        //let url = `https://${shop}/admin/products.json`;
-        let url = `https://${shop}/admin/api/2019-10/orders.json?status=closed&financial_status=paid`;
+        let url = `https://${shop}/admin/api/${year}-${month}/orders.json?financial_status=paid`;
 
         let options = {
             method: 'GET',
@@ -117,11 +118,13 @@ router.get('/get-products', (req, res) => {
 
         request(options)
             .then((orders) => {
-                console.log(orders.orders);
-                res.status(200).send("Products listed");
+                let sum = 0;
+                orders.orders.forEach(order => {
+                    sum = sum + parseFloat(order.total_price);
+                });
+                res.status(200).json({ revenue: sum });
             })
             .catch((error) => {
-                console.log(error);
                 res.status(500).send("Something went wrong");
             })
 
