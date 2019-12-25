@@ -10,7 +10,7 @@ const Shopify = require('shopify-api-node');
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products,read_orders';
-const forwardingAddress = "https://ebe3f0a7.ngrok.io";
+const forwardingAddress = "https://22d634f7.ngrok.io";
 
 
 router.get('/shopify', (req, res) => {
@@ -100,11 +100,13 @@ router.get('/shopify/callback', (req, res) => {
 });
 
 
-//Get revenue based on all paid orders
-router.get('/get-revenue-all', (req, res) => {
-    const { shop, month, year } = req.query;
+//Get monthly revenue based on all paid orders
+router.get('/get-daily-revenue', (req, res) => {
+    const { shop, month, year, day } = req.query;
     try {
-        let url = `https://${shop}/admin/api/${year}-${month}/orders.json?financial_status=paid`;
+        //let url = `https://${shop}/admin/api/${year}-${month}/orders.json?financial_status=paid`;
+        let url = `https://${shop}/admin/api/2019-10/orders.json?created_at_min=${year}-${month}-${day}T00:00:00-00:00
+                    &created_at_max=${year}-${month}-${day}T00:00:00-00:00`;
 
         let options = {
             method: 'GET',
@@ -118,14 +120,16 @@ router.get('/get-revenue-all', (req, res) => {
 
         request(options)
             .then((orders) => {
-                let sum = 0;
-                orders.orders.forEach(order => {
-                    sum = sum + parseFloat(order.total_price);
-                });
-                res.status(200).json({ revenue: sum });
+                // let sum = 0;
+                // orders.orders.forEach(order => {
+                //     sum = sum + parseFloat(order.total_price);
+                // });
+                // res.status(200).json({ success: true, revenue: sum });
+                console.log(orders.orders.length)
+                res.json(orders.orders);
             })
             .catch((error) => {
-                res.status(500).send("Something went wrong");
+                res.status(404).json({ success: false, message: "No orders found" });
             })
 
     } catch (error) {
