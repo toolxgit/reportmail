@@ -151,7 +151,7 @@ router.get('/get-monthly-revenue', (req, res) => {
     const { shop, month, year } = req.query;
     try {
         //let url = `https://${shop}/admin/api/${year}-${month}/orders.json?financial_status=paid`;
-        let url = `https://${shop}/admin/api/2019-10/orders.json?created_at_min=${year}-${month}`;
+        let url = `https://${shop}/admin/api/2019-10/orders.json?created_at_min=${year}-${month}-01`;
 
         let options = {
             method: 'GET',
@@ -193,11 +193,11 @@ router.get('/get-monthly-revenue', (req, res) => {
 
 
 //Get yearly revenue based on all paid orders
-router.get('/get-daily-revenue', (req, res) => {
+router.get('/get-yearly-revenue', (req, res) => {
     const { shop, year } = req.query;
     try {
         //let url = `https://${shop}/admin/api/${year}-${month}/orders.json?financial_status=paid`;
-        let url = `https://${shop}/admin/api/2019-10/orders.json?created_at_min=${year}`;
+        let url = `https://${shop}/admin/api/2019-10/orders.json?created_at_min=${year}-01-01`;
 
         let options = {
             method: 'GET',
