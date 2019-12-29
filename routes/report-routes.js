@@ -10,7 +10,7 @@ const Shopify = require('shopify-api-node');
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products,read_orders';
-const forwardingAddress = "https://22d634f7.ngrok.io";
+const forwardingAddress = "https://1c42defc.ngrok.io";
 
 
 router.get('/shopify', (req, res) => {
@@ -100,13 +100,12 @@ router.get('/shopify/callback', (req, res) => {
 });
 
 
-//Get monthly revenue based on all paid orders
+//Get daily revenue based on all paid orders
 router.get('/get-daily-revenue', (req, res) => {
     const { shop, month, year, day } = req.query;
     try {
         //let url = `https://${shop}/admin/api/${year}-${month}/orders.json?financial_status=paid`;
-        let url = `https://${shop}/admin/api/2019-10/orders.json?created_at_min=${year}-${month}-${day}T00:00:00-00:00
-                    &created_at_max=${year}-${month}-${day}T00:00:00-00:00`;
+        let url = `https://${shop}/admin/api/2019-10/orders.json?created_at_min=${year}-${month}-${day}`;
 
         let options = {
             method: 'GET',
@@ -120,22 +119,123 @@ router.get('/get-daily-revenue', (req, res) => {
 
         request(options)
             .then((orders) => {
-                // let sum = 0;
-                // orders.orders.forEach(order => {
-                //     sum = sum + parseFloat(order.total_price);
-                // });
-                // res.status(200).json({ success: true, revenue: sum });
-                console.log(orders.orders.length)
-                res.json(orders.orders);
+                let orderCount = 0;
+                let orderRevenue = 0;
+                orders.orders.forEach(order => {
+                    //console.log(order.created_at);
+                    if (order.created_at.includes(`${year}-${month}-${day}`)) {
+                        console.log(order.total_price);
+                        orderCount += 1;
+                        orderRevenue += parseFloat(order.total_price);
+                    }
+                });
+                res.status(200).json({
+                    "success": true,
+                    "orderCount": orderCount,
+                    "orderRevenue": orderRevenue
+                });
             })
             .catch((error) => {
+                console.log(error);
                 res.status(404).json({ success: false, message: "No orders found" });
             })
 
     } catch (error) {
         res.send("No access token available");
     }
-})
+});
+
+
+//Get monthly revenue based on all paid orders
+router.get('/get-monthly-revenue', (req, res) => {
+    const { shop, month, year } = req.query;
+    try {
+        //let url = `https://${shop}/admin/api/${year}-${month}/orders.json?financial_status=paid`;
+        let url = `https://${shop}/admin/api/2019-10/orders.json?created_at_min=${year}-${month}`;
+
+        let options = {
+            method: 'GET',
+            url: url,
+            json: true,
+            headers: {
+                'X-Shopify-Access-Token': process.env.ACCESS_TOKEN,
+                'content-type': 'application/json'
+            }
+        };
+
+        request(options)
+            .then((orders) => {
+                let orderCount = 0;
+                let orderRevenue = 0;
+                orders.orders.forEach(order => {
+                    //console.log(order.created_at);
+                    if (order.created_at.includes(`${year}-${month}`)) {
+                        console.log(order.total_price);
+                        orderCount += 1;
+                        orderRevenue += parseFloat(order.total_price);
+                    }
+                });
+                res.status(200).json({
+                    "success": true,
+                    "orderCount": orderCount,
+                    "orderRevenue": orderRevenue
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                res.status(404).json({ success: false, message: "No orders found" });
+            })
+
+    } catch (error) {
+        res.send("No access token available");
+    }
+});
+
+
+//Get yearly revenue based on all paid orders
+router.get('/get-daily-revenue', (req, res) => {
+    const { shop, year } = req.query;
+    try {
+        //let url = `https://${shop}/admin/api/${year}-${month}/orders.json?financial_status=paid`;
+        let url = `https://${shop}/admin/api/2019-10/orders.json?created_at_min=${year}`;
+
+        let options = {
+            method: 'GET',
+            url: url,
+            json: true,
+            headers: {
+                'X-Shopify-Access-Token': process.env.ACCESS_TOKEN,
+                'content-type': 'application/json'
+            }
+        };
+
+        request(options)
+            .then((orders) => {
+                let orderCount = 0;
+                let orderRevenue = 0;
+                orders.orders.forEach(order => {
+                    //console.log(order.created_at);
+                    if (order.created_at.includes(`${year}`)) {
+                        console.log(order.total_price);
+                        orderCount += 1;
+                        orderRevenue += parseFloat(order.total_price);
+                    }
+                });
+                res.status(200).json({
+                    "success": true,
+                    "orderCount": orderCount,
+                    "orderRevenue": orderRevenue
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                res.status(404).json({ success: false, message: "No orders found" });
+            })
+
+    } catch (error) {
+        res.send("No access token available");
+    }
+});
 
 
 module.exports = router;
