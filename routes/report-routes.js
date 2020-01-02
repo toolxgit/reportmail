@@ -76,18 +76,6 @@ router.get('/shopify/callback', (req, res) => {
                 const accessToken = accessTokenResponse.access_token;
 
                 process.env.ACCESS_TOKEN = accessToken;
-
-                // const shopify = new Shopify({
-                //     shopName: shop,
-                //     accessToken: accessToken
-                // });
-
-                // shopify.order
-                //     .list({ limit: 5 })
-                //     .then((orders) => console.log(orders))
-                //     .catch((err) => console.error(err));
-
-
                 res.status(200).send("Got an access token, let's do something with it");
             })
             .catch((error) => {
@@ -122,7 +110,6 @@ router.get('/get-daily-revenue', (req, res) => {
                 let orderCount = 0;
                 let orderRevenue = 0;
                 orders.orders.forEach(order => {
-                    //console.log(order.created_at);
                     if (order.created_at.includes(`${year}-${month}-${day}`)) {
                         console.log(order.total_price);
                         orderCount += 1;
@@ -168,7 +155,6 @@ router.get('/get-monthly-revenue', (req, res) => {
                 let orderCount = 0;
                 let orderRevenue = 0;
                 orders.orders.forEach(order => {
-                    //console.log(order.created_at);
                     if (order.created_at.includes(`${year}-${month}`)) {
                         console.log(order.total_price);
                         orderCount += 1;
@@ -214,7 +200,6 @@ router.get('/get-yearly-revenue', (req, res) => {
                 let orderCount = 0;
                 let orderRevenue = 0;
                 orders.orders.forEach(order => {
-                    //console.log(order.created_at);
                     if (order.created_at.includes(`${year}`)) {
                         console.log(order.total_price);
                         orderCount += 1;
