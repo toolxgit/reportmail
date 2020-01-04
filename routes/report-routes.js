@@ -107,23 +107,30 @@ router.get('/get-daily-revenue', (req, res) => {
 
         request(options)
             .then((orders) => {
-                let orderCount = 0;
-                let orderRevenue = 0;
+                let currentOrderCount = 0;
+                let currentOrderRevenue = 0;
+                let lastYearOrderCount = 0;
+                let lastYearOrderRevenue = 0;
+
                 orders.orders.forEach(order => {
                     if (order.created_at.includes(`${year}-${month}-${day}`)) {
-                        console.log(order.total_price);
-                        orderCount += 1;
-                        orderRevenue += parseFloat(order.total_price);
+                        currentOrderCount += 1;
+                        currentOrderRevenue += parseFloat(order.total_price);
+                    }
+                    if (order.created_at.includes(`${year-1}-${month}-${day}`)) {
+                        lastYearOrderCount += 1;
+                        lastYearOrderRevenue += parseFloat(order.total_price);
                     }
                 });
                 res.status(200).json({
                     "success": true,
-                    "orderCount": orderCount,
-                    "orderRevenue": orderRevenue
+                    "CurrentYearOrderCount": currentOrderCount,
+                    "CurrentYearOrderRevenue": currentOrderRevenue,
+                    "LastYearOrderCount": lastYearOrderCount,
+                    "LastYearOrderRevenue": lastYearOrderRevenue
                 });
             })
             .catch((error) => {
-                console.log(error);
                 res.status(404).json({ success: false, message: "No orders found" });
             })
 
@@ -152,23 +159,30 @@ router.get('/get-monthly-revenue', (req, res) => {
 
         request(options)
             .then((orders) => {
-                let orderCount = 0;
-                let orderRevenue = 0;
+                let currentOrderCount = 0;
+                let currentOrderRevenue = 0;
+                let lastYearOrderCount = 0;
+                let lastYearOrderRevenue = 0;
+
                 orders.orders.forEach(order => {
                     if (order.created_at.includes(`${year}-${month}`)) {
-                        console.log(order.total_price);
-                        orderCount += 1;
-                        orderRevenue += parseFloat(order.total_price);
+                        currentOrderCount += 1;
+                        currentOrderRevenue += parseFloat(order.total_price);
+                    }
+                    if (order.created_at.includes(`${year-1}-${month}`)) {
+                        lastYearOrderCount += 1;
+                        lastYearOrderRevenue += parseFloat(order.total_price);
                     }
                 });
                 res.status(200).json({
                     "success": true,
-                    "orderCount": orderCount,
-                    "orderRevenue": orderRevenue
+                    "CurrentYearOrderCount": currentOrderCount,
+                    "CurrentYearOrderRevenue": currentOrderRevenue,
+                    "LastYearOrderCount": lastYearOrderCount,
+                    "LastYearOrderRevenue": lastYearOrderRevenue
                 });
             })
             .catch((error) => {
-                console.log(error);
                 res.status(404).json({ success: false, message: "No orders found" });
             })
 
@@ -197,23 +211,30 @@ router.get('/get-yearly-revenue', (req, res) => {
 
         request(options)
             .then((orders) => {
-                let orderCount = 0;
-                let orderRevenue = 0;
+                let currentOrderCount = 0;
+                let currentOrderRevenue = 0;
+                let lastYearOrderCount = 0;
+                let lastYearOrderRevenue = 0;
+
                 orders.orders.forEach(order => {
                     if (order.created_at.includes(`${year}`)) {
-                        console.log(order.total_price);
-                        orderCount += 1;
-                        orderRevenue += parseFloat(order.total_price);
+                        currentOrderCount += 1;
+                        currentOrderRevenue += parseFloat(order.total_price);
+                    }
+                    if (order.created_at.includes(`${year-1}`)) {
+                        lastYearOrderCount += 1;
+                        lastYearOrderRevenue += parseFloat(order.total_price);
                     }
                 });
                 res.status(200).json({
                     "success": true,
-                    "orderCount": orderCount,
-                    "orderRevenue": orderRevenue
+                    "CurrentYearOrderCount": currentOrderCount,
+                    "CurrentYearOrderRevenue": currentOrderRevenue,
+                    "LastYearOrderCount": lastYearOrderCount,
+                    "LastYearOrderRevenue": lastYearOrderRevenue
                 });
             })
             .catch((error) => {
-                console.log(error);
                 res.status(404).json({ success: false, message: "No orders found" });
             })
 
