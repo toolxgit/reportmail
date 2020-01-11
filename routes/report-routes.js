@@ -12,6 +12,8 @@ const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products,read_orders';
 const forwardingAddress = "https://1c42defc.ngrok.io";
 
+import '../config/db_config';
+
 
 router.get('/shopify', (req, res) => {
     const shop = req.query.shop;
@@ -117,7 +119,7 @@ router.get('/get-daily-revenue', (req, res) => {
                         currentOrderCount += 1;
                         currentOrderRevenue += parseFloat(order.total_price);
                     }
-                    if (order.created_at.includes(`${year-1}-${month}-${day}`)) {
+                    if (order.created_at.includes(`${year - 1}-${month}-${day}`)) {
                         lastYearOrderCount += 1;
                         lastYearOrderRevenue += parseFloat(order.total_price);
                     }
@@ -169,7 +171,7 @@ router.get('/get-monthly-revenue', (req, res) => {
                         currentOrderCount += 1;
                         currentOrderRevenue += parseFloat(order.total_price);
                     }
-                    if (order.created_at.includes(`${year-1}-${month}`)) {
+                    if (order.created_at.includes(`${year - 1}-${month}`)) {
                         lastYearOrderCount += 1;
                         lastYearOrderRevenue += parseFloat(order.total_price);
                     }
@@ -221,7 +223,7 @@ router.get('/get-yearly-revenue', (req, res) => {
                         currentOrderCount += 1;
                         currentOrderRevenue += parseFloat(order.total_price);
                     }
-                    if (order.created_at.includes(`${year-1}`)) {
+                    if (order.created_at.includes(`${year - 1}`)) {
                         lastYearOrderCount += 1;
                         lastYearOrderRevenue += parseFloat(order.total_price);
                     }
