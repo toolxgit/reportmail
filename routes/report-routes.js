@@ -10,7 +10,7 @@ const Shopify = require('shopify-api-node');
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products,read_orders';
-const forwardingAddress = "https://1c42defc.ngrok.io";
+const forwardingAddress = "https://toolx-temp.herokuapp.com";
 
 import '../config/db_config';
 
