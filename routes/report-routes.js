@@ -5,14 +5,18 @@ const cookie = require('cookie');
 const querystring = require('querystring');
 const request = require('request-promise');
 const crypto = require('crypto');
-const Shopify = require('shopify-api-node');
 
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products,read_orders';
 const forwardingAddress = "https://toolx-temp.herokuapp.com";
 
-import '../config/db_config';
+const mongoose = require('mongoose');
+
+mongoose.connect('mongodb+srv://root:root@cluster0-pstwe.mongodb.net/test?retryWrites=true&w=majority', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
 
 router.get('/shopify', (req, res) => {
