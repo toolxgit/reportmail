@@ -13,11 +13,16 @@ const forwardingAddress = "https://toolx-temp.herokuapp.com";
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb+srv://root:root@cluster0-pstwe.mongodb.net/test?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+function connectDb() {
+    mongoose.connect('mongodb+srv://root:root@cluster0-pstwe.mongodb.net/test?retryWrites=true&w=majority', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }, (err) => {
+        console.log(err);
+    })
+}
 
+connectDb();
 
 router.get('/shopify', (req, res) => {
     const shop = req.query.shop;
