@@ -1,10 +1,13 @@
 const router = require('express').Router();
 const nonce = require('nonce')();
 const cookie = require('cookie');
+const MongoClient = require('mongodb').MongoClient;
 
 const querystring = require('querystring');
 const request = require('request-promise');
 const crypto = require('crypto');
+
+const uri = "mongodb+srv://root:root@cluster0-pstwe.mongodb.net/test?retryWrites=true&w=majority";
 
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
