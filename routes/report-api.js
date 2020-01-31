@@ -102,6 +102,8 @@ router.get('/shopify/callback', (req, res) => {
 });
 
 
+let allOrders = [];
+
 function getDataIntoDb() {
   let url = `https://${process.env.SHOP_NAME}/admin/api/2019-10/orders.json?created_at_min=2004-01-01`;
 
@@ -117,10 +119,16 @@ function getDataIntoDb() {
 
   request(options)
     .then((orders) => {
-      res.json(orders);
+      allOrders = orders;
     })
 
 }
+
+router.get('/get-data', (req, res) => {
+  getDataIntoDb().then(() => {
+    res.send(allOrders);
+  });
+});
 
 
 module.exports = router;
