@@ -2,20 +2,11 @@ const dotenv = require('dotenv').config();
 const express = require('express');
 const app = express();
 
-const dbConfig = require('./config/db_config');
 
 const PORT = process.env.PORT;
 
-const reportRoutes = require('./routes/report-routes');
+const reportRoutes = require('./routes/report-api');
 
-
-// MongoClient.connect(uri,(err, client) => {
-//     if(err){
-//         console.log(err);
-//         throw err;
-//     }
-//     console.log('Connected...');
-// });
 
 app.use('/', reportRoutes);
 

@@ -2,6 +2,7 @@ const router = require('express').Router();
 const nonce = require('nonce')();
 const cookie = require('cookie');
 const MongoClient = require('mongodb').MongoClient;
+const mongoose = require('mongoose');
 
 const querystring = require('querystring');
 const request = require('request-promise');
@@ -14,18 +15,17 @@ const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products,read_orders';
 const forwardingAddress = "https://toolx-temp.herokuapp.com";
 
-const mongoose = require('mongoose');
-
-function connectDb() {
-    mongoose.connect('mongodb+srv://root:root@cluster0-pstwe.mongodb.net/test?retryWrites=true&w=majority', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }, (err) => {
+mongoose.connect(uri,(err,connection)=>{
+    if(err){
         console.log(err);
-    })
-}
+    }else {
+        console.log("DB Connected");
+    }
+});
 
-connectDb();
+
+var connection = mongoose.connection;
+
 
 router.get('/shopify', (req, res) => {
     const shop = req.query.shop;
