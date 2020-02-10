@@ -13,7 +13,7 @@ const uri = "mongodb+srv://root:root@cluster0-pstwe.mongodb.net/test?retryWrites
 const apiKey = process.env.SHOPIFY_API_KEY;
 const apiSecret = process.env.SHOPIFY_API_SECRET;
 const scopes = 'read_products,read_orders';
-const forwardingAddress = "https://ef24de65.ngrok.io";
+const forwardingAddress = "https://toolx-temp.herokuapp.com/";
 
 mongoose.connect(uri, (err, connection) => {
   if (err) {
