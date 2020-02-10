@@ -90,7 +90,9 @@ router.get('/shopify/callback', (req, res) => {
         const accessToken = accessTokenResponse.access_token;
 
         process.env.ACCESS_TOKEN = accessToken;
-        res.status(200).send("Got an access token, let's do something with it");
+        res.status(200).send({
+          accessToken: accessToken
+        });
       })
       .catch((error) => {
         res.status(error.statusCode).send(error);
